@@ -18,7 +18,7 @@ class LogTableSeeder extends Seeder
 		$pcs 										= ['redhat', 'ubuntu', 'debian', 'mint', 'centos', '7', 'xp'];
 		try
 		{
-			foreach(range(1, count($total_persons)) as $index)
+			foreach(range(1, $total_persons) as $index)
 			{
 				$person 							= Person::find($index);
 
@@ -44,7 +44,7 @@ class LogTableSeeder extends Seeder
 					$data 							= new Log;
 					$data->fill([
 						'name'						=> $logs[$state],
-						'on'						=> date("Y-m-d H:i:s", strtotime('+ '.$index2.' '.$time)),
+						'on'						=> date("Y-m-d H:i:s"),
 						'pc'						=> $pcs[$rand],
 					]);
 

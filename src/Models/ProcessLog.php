@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * 	name 		 					: Required max 255
  * 	on 		 						: Required, Date
  * 	start 		 					: Required, Time
- * 	end 		 					: Required, Time
+ * 	end 		 					: Time
  * 	is_overtime 		 			: Boolean
  *	created_at						: Timestamp
  * 	updated_at						: Timestamp
@@ -34,7 +34,7 @@ class ProcessLog extends BaseModel {
 
 	public 		$timestamps 		= true;
 
-	protected 	$table 				= 'logs';
+	protected 	$table 				= 'process_logs';
 	protected 	$fillable			= [
 										'name' 							,
 										'on' 							,
@@ -47,13 +47,13 @@ class ProcessLog extends BaseModel {
 										'name'							=> 'required|max:255',
 										'on'							=> 'required|date_format:"Y-m-d"',
 										'start'							=> 'required|date_format:"H:i:s"',
-										'end'							=> 'required|date_format:"H:i:s"',
+										'end'							=> 'date_format:"H:i:s"',
 										'is_overtime'					=> 'bool',
 									];
 	public $searchable 				= 	[
 											'id' 						=> 'ID', 
 											'personid' 					=> 'PersonID', 
-											'on' 						=> 'On', 
+											'ondate' 					=> 'OnDate', 
 											'withattributes' 			=> 'WithAttributes'
 										];
 	public $sortable 				= ['created_at'];
@@ -104,7 +104,7 @@ class ProcessLog extends BaseModel {
 		return $query->where('person_id', $variable);
 	}
 
-	public function scopeOn($query, $variable)
+	public function scopeOnDate($query, $variable)
 	{
 		return $query->where('on', $variable);
 	}

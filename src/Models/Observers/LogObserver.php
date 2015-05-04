@@ -40,8 +40,8 @@ class LogObserver
 		$on 					= date("Y-m-d", strtotime($model['attributes']['on']));
 		$time 					= date("H:i:s", strtotime($model['attributes']['on']));
 		$data 					= new ProcessLog;
-		$data->on($on)->first();
-		if($data)
+		$data->ondate($on)->first();
+		if($data->id)
 		{
 			if($data->start <= $time)
 			{
@@ -66,9 +66,11 @@ class LogObserver
 			$person 			= Person::find($model['attributes']['person_id']);
 			$data->fill([
 								'name'			=> 'Login (Temporary)',
+								'on'			=> $on,
 								'start'			=> $time,
 						]
 			);
+
 			$data->Person()->associate($person);
 			if (!$data->save())
 			{
