@@ -1,0 +1,23 @@
+{
+    "name": "thunderid/log",
+    "description": "",
+    "authors": [
+        {
+            "name": "chelsy",
+            "email": "chelsymooy1108@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0",
+        "illuminate/support": "5.0.*"
+    },
+    "autoload": {
+        "classmap": [
+            "src/migrations/"
+        ],
+        "psr-4": {
+            "ThunderID\\Log\\": "src/"
+        }
+    },
+    "minimum-stability": "dev"
+}
