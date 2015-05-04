@@ -47,7 +47,7 @@ class LogObserver
 			{
 				$data->fill([
 									'end'			=> $time,
-							];
+							]
 				);
 			}
 
