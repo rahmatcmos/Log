@@ -67,7 +67,7 @@ class LogObserver
 			$data->fill([
 								'name'			=> 'Login (Temporary)',
 								'start'			=> $time,
-						];
+						]
 			);
 			$data->Person()->associate($person);
 			if (!$data->save())
