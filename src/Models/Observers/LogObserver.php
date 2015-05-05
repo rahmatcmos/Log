@@ -47,6 +47,8 @@ class LogObserver
 			{
 				$data->fill([
 									'end'			=> $time,
+									'margin_start'	=> strtotime('s',$data->start - $data->schedule_start),
+									'margin_end'	=> strtotime('s',$data->end - $data->schedule_end),
 							]
 				);
 			}
@@ -68,6 +70,8 @@ class LogObserver
 								'name'			=> 'Login (Temporary)',
 								'on'			=> $on,
 								'start'			=> $time,
+								'schedule_start'=> '08.00',
+								'schedule_end'	=> '16.00',
 						]
 			);
 

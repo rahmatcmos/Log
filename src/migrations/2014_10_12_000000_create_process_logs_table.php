@@ -16,11 +16,15 @@ class CreateProcessLogsTable extends Migration {
 		{
 			$table->increments('id');
 			$table->integer('person_id')->unsigned()->index();
+			$table->integer('person_calendar_id')->unsigned()->index();
 			$table->string('name', 255);
 			$table->date('on');
 			$table->time('start');
 			$table->time('end');
-			$table->boolean('is_overtime');
+			$table->time('schedule_start');
+			$table->time('schedule_end');
+			$table->double('margin_start');
+			$table->double('margin_end');
 			$table->timestamps();
 			$table->softDeletes();
 			

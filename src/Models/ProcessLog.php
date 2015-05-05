@@ -6,11 +6,15 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * Document Model:
  * 	ID 								: Auto Increment, Integer, PK
  * 	person_id 						: Foreign Key From Person, Integer, Required
+ * 	person_calendar_id 				: Foreign Key From PersonCalendar, Integer, Required
  * 	name 		 					: Required max 255
  * 	on 		 						: Required, Date
  * 	start 		 					: Required, Time
  * 	end 		 					: Time
- * 	is_overtime 		 			: Boolean
+ * 	schedule_start 		 			: Required, Time
+ * 	schedule_end 		 			: Required, Time
+ * 	margin_start 		 			: Double
+ * 	margin_end 		 				: Double
  *	created_at						: Timestamp
  * 	updated_at						: Timestamp
  * 	deleted_at						: Timestamp
@@ -18,9 +22,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 /* ----------------------------------------------------------------------
  * Document Relationship :
  * 	//other package
- 	1 Relationship belongsTo 
+ 	2 Relationships belongsTo 
 	{
 		Person
+		PersonCalendar
 	}
 
  * ---------------------------------------------------------------------- */
@@ -31,6 +36,7 @@ class ProcessLog extends BaseModel {
 
 	use SoftDeletes;
 	use \ThunderID\Log\Models\Relations\BelongsTo\HasPersonTrait;
+	use \ThunderID\Log\Models\Relations\BelongsTo\HasPersonCalendarTrait;
 
 	public 		$timestamps 		= true;
 
@@ -40,7 +46,10 @@ class ProcessLog extends BaseModel {
 										'on' 							,
 										'start' 						,
 										'end' 							,
-										'is_overtime' 					,
+										'schedule_start' 				,
+										'schedule_end' 					,
+										'margin_start' 					,
+										'margin_end' 					,
 									];
 
 	protected 	$rules				= [
@@ -48,7 +57,10 @@ class ProcessLog extends BaseModel {
 										'on'							=> 'required|date_format:"Y-m-d"',
 										'start'							=> 'required|date_format:"H:i:s"',
 										'end'							=> 'date_format:"H:i:s"',
-										'is_overtime'					=> 'bool',
+										'schedule_start'				=> 'required|date_format:"H:i:s"',
+										'schedule_end'					=> 'required|date_format:"H:i:s"',
+										'margin_start'					=> 'numeric',
+										'margin_end'					=> 'numeric',
 									];
 	public $searchable 				= 	[
 											'id' 						=> 'ID', 
