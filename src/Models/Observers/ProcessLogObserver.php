@@ -35,10 +35,7 @@ class ProcessLogObserver
 
 	public function updating($model)
 	{
-		//temporary
-		$model['errors'] 	= ['Tidak dapat mengubah process log.'];
-
-		return false;
+		//		
 	}
 
 	public function deleting($model)
