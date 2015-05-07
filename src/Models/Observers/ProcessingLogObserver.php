@@ -21,7 +21,7 @@ class ProcessingLogObserver
 		$time 					= date("H:i:s", strtotime($model['attributes']['on']));
 		$data 					= new ProcessLog;
 		$data 					= $data->ondate($on)->first();
-		if($data->id)
+		if(isset($data->id))
 		{
 			if($data->start <= $time)
 			{

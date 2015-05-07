@@ -31,7 +31,7 @@ class LogController extends Controller {
 		$api 										= $attributes['application']['api'];
 		if($api['client']!='123456789' || $api['secret']!='123456789')
 		{
-			return Response::json(['message' => 'Server Error'], 500);
+			return Response::json(['message' => 'Not Found'], 404);
 		}
 
 		if(!$attributes['log'])
@@ -54,9 +54,8 @@ class LogController extends Controller {
 				$is_success_2 					= json_decode($saved_log);
 				if(!$is_success_2->meta->success)
 				{
-					print_r($saved_log);exit;
 					DB::rollback();
-					return Response::json(['message' => 'Server Error'], 500);
+					return Response::json(['message' => 'Method Failure'], 420);
 				}
 			}
 		}
