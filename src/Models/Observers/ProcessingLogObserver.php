@@ -15,21 +15,32 @@ use ThunderID\Person\Models\Person;
 
 class ProcessingLogObserver 
 {
-	public function updating($model)
+	public function saved($model)
 	{
 		$on 					= date("Y-m-d", strtotime($model['attributes']['on']));
 		$time 					= date("H:i:s", strtotime($model['attributes']['on']));
 		$data 					= new ProcessLog;
-		$data 					= $data->ondate($on)->first();
+		$data 					= $data->ondate($on)->personid($model['attributes']['person_id'])->first();
 		if(isset($data->id))
 		{
 			if($data->start <= $time)
 			{
+				$margin_start 	= strtotime($data->start) - strtotime($data->schedule_start);
+				if(strtotime($data->start) > strtotime($data->schedule_start))
+				{
+					$margin_start= 0 - $margin_start;
+				}
+
+				$margin_end 	= strtotime($data->end) - strtotime($data->schedule_end);
+				if(strtotime($data->end) < strtotime($data->schedule_end))
+				{
+					$margin_end	= 0 - $margin_end;
+				}
 				//consider to count idle
 				$data->fill([
 									'end'			=> $time,
-									'margin_start'	=> strtotime('s',$data->start - $data->schedule_start),
-									'margin_end'	=> strtotime('s',$data->end - $data->schedule_end),
+									'margin_start'	=> $margin_start,
+									'margin_end'	=> $margin_end,
 							]
 				);
 			}

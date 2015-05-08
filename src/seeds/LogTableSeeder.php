@@ -44,7 +44,7 @@ class LogTableSeeder extends Seeder
 					$data 							= new Log;
 					$data->fill([
 						'name'						=> $logs[$state],
-						'on'						=> date("Y-m-d H:i:s"),
+						'on'						=> date("Y-m-d H:i:s", strtotime('+ '.$index2.' '.$time)),
 						'pc'						=> $pcs[$rand],
 					]);
 

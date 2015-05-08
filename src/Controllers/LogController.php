@@ -50,7 +50,15 @@ class LogController extends Controller {
 				$log['on']						= date("Y-m-d H:i:s", strtotime($value[2]));
 				$log['pc']						= $value[3];
 
-				$saved_log 						= $this->dispatch(new Saving(new Log, $log, null, new Person, $value[0]));
+				$data 							= $this->dispatch(new Getting(new person, ['email' => $value[0]], [] ,1, 1));
+				$person 						= json_decode($data);
+				if(!$person->meta->success)
+				{
+					DB::rollback();
+					return Response::json(['message' => 'User tidak terdaftar'], 420);
+				}
+
+				$saved_log 						= $this->dispatch(new Saving(new Log, $log, null, new Person, $person->data->id));
 				$is_success_2 					= json_decode($saved_log);
 				if(!$is_success_2->meta->success)
 				{

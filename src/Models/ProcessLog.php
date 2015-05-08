@@ -66,9 +66,15 @@ class ProcessLog extends BaseModel {
 											'id' 						=> 'ID', 
 											'personid' 					=> 'PersonID', 
 											'ondate' 					=> 'OnDate', 
+											'late' 						=> 'Late', 
+											'ontime' 					=> 'OnTime', 
+											'earlier' 					=> 'Earlier', 
+											'overtime' 					=> 'Overtime', 
+											'charttag' 					=> 'ChartTag', 
+											'branchname' 				=> 'BranchName', 
 											'withattributes' 			=> 'WithAttributes'
 										];
-	public $sortable 				= ['created_at'];
+	public $sortable 				= ['created_at', 'on'];
 
 	/* ---------------------------------------------------------------------------- CONSTRUCT ----------------------------------------------------------------------------*/
 	/**
@@ -118,6 +124,52 @@ class ProcessLog extends BaseModel {
 
 	public function scopeOnDate($query, $variable)
 	{
-		return $query->where('on', $variable);
+		if(is_array($variable))
+		{
+			if(!is_null($variable[1]))
+			{
+				return $query->where('on', '<=', date('Y-m-d', strtotime($variable[1])))
+							 ->where('on', '>=', date('Y-m-d', strtotime($variable[0])));
+			}
+			elseif(!is_null($variable[0]))
+			{
+				return $query->where('on', '>=', date('Y-m-d', strtotime($variable[0])));
+			}
+			else
+			{
+				return $query->where('on', '>=', date('Y-m-d'));
+			}
+		}
+		return $query->where('on', '>=', date('Y-m-d', strtotime($variable)));
+	}
+
+	public function scopeLate($query, $variable)
+	{
+		return $query->where('margin_start', '<', 0);
+	}
+
+	public function scopeOnTime($query, $variable)
+	{
+		return $query->where('margin_start', '>=', 0);
+	}
+
+	public function scopeEarlier($query, $variable)
+	{
+		return $query->where('margin_end', '<', 0);
+	}
+
+	public function scopeOvertime($query, $variable)
+	{
+		return $query->where('margin_end', '>', 0);
+	}
+
+	public function scopeWithAttributes($query, $variable)
+	{
+		if(!is_array($variable))
+		{
+			$variable 			= [$variable];
+		}
+
+		return $query->with($variable);
 	}
 }

@@ -35,11 +35,6 @@ class LogObserver
 		}
 	}
 
-	public function saved($model)
-	{
-		//
-	}
-
 	public function updating($model)
 	{
 		//
