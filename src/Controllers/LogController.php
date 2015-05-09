@@ -46,7 +46,7 @@ class LogController extends Controller {
 			$attributes['log']					= (array)$attributes['log'];
 			foreach ($attributes['log'] as $key => $value) 
 			{
-				$log['name']					= $value[1];
+				$log['name']					= strtolower($value[1]);
 				$log['on']						= date("Y-m-d H:i:s", strtotime($value[2]));
 				$log['pc']						= $value[3];
 

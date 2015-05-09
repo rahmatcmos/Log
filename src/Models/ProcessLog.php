@@ -1,6 +1,7 @@
 <?php namespace ThunderID\Log\Models;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
+use DB;
 
 /* ----------------------------------------------------------------------
  * Document Model:
@@ -15,6 +16,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * 	schedule_end 		 			: Required, Time
  * 	margin_start 		 			: Double
  * 	margin_end 		 				: Double
+ * 	total_idle 		 				: Double
  *	created_at						: Timestamp
  * 	updated_at						: Timestamp
  * 	deleted_at						: Timestamp
@@ -50,6 +52,7 @@ class ProcessLog extends BaseModel {
 										'schedule_end' 					,
 										'margin_start' 					,
 										'margin_end' 					,
+										'total_idle' 					,
 									];
 
 	protected 	$rules				= [
@@ -61,6 +64,7 @@ class ProcessLog extends BaseModel {
 										'schedule_end'					=> 'required|date_format:"H:i:s"',
 										'margin_start'					=> 'numeric',
 										'margin_end'					=> 'numeric',
+										'total_idle'					=> 'numeric',
 									];
 	public $searchable 				= 	[
 											'id' 						=> 'ID', 
@@ -70,11 +74,14 @@ class ProcessLog extends BaseModel {
 											'ontime' 					=> 'OnTime', 
 											'earlier' 					=> 'Earlier', 
 											'overtime' 					=> 'Overtime', 
+											'global' 					=> 'Global', 
 											'charttag' 					=> 'ChartTag', 
 											'branchname' 				=> 'BranchName', 
+											'orderworkhour' 			=> 'OrderWorkHour', 
+											'orderavgworkhour' 			=> 'OrderAverageWorkHour', 
 											'withattributes' 			=> 'WithAttributes'
 										];
-	public $sortable 				= ['created_at', 'on'];
+	public $sortable 				= ['created_at', 'on', 'margin_start', 'margin_end', 'total_idle'];
 
 	/* ---------------------------------------------------------------------------- CONSTRUCT ----------------------------------------------------------------------------*/
 	/**
@@ -163,6 +170,17 @@ class ProcessLog extends BaseModel {
 		return $query->where('margin_end', '>', 0);
 	}
 
+	public function scopeGlobal($query, $variable)
+	{
+		return $query->selectRaw('sum(margin_start) as margin_start')
+					->selectRaw('sum(margin_end) as margin_end')
+					->selectRaw('sum(TIME_TO_SEC(end)) - sum(TIME_TO_SEC(start)) as total_workhour')
+					->selectRaw('avg(TIME_TO_SEC(end)) - avg(TIME_TO_SEC(start)) as average_workhour')
+					->selectRaw('sum(TIME_TO_SEC(total_idle)) as total_idle')
+					->selectRaw('person_id')
+					->groupBy('person_id');
+	}
+
 	public function scopeWithAttributes($query, $variable)
 	{
 		if(!is_array($variable))
@@ -171,5 +189,15 @@ class ProcessLog extends BaseModel {
 		}
 
 		return $query->with($variable);
+	}
+
+	public function scopeOrderWorkHour($query, $variable)
+	{
+		return $query->orderBy(DB::Raw('sum(TIME_TO_SEC(end)) - sum(TIME_TO_SEC(start))'));
+	}
+
+	public function scopeOrderAverageWorkHour($query, $variable)
+	{
+		return $query->orderBy(DB::Raw('avg(TIME_TO_SEC(end)) - avg(TIME_TO_SEC(start))'));
 	}
 }

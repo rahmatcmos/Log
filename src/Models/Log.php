@@ -47,6 +47,7 @@ class Log extends BaseModel {
 	public $searchable 				= 	[
 											'id' 						=> 'ID', 
 											'personid' 					=> 'PersonID', 
+											'name' 						=> 'Name', 
 											'withattributes' 			=> 'WithAttributes'
 										];
 	public $sortable 				= ['created_at'];
@@ -95,6 +96,37 @@ class Log extends BaseModel {
 	public function scopePersonID($query, $variable)
 	{
 		return $query->where('person_id', $variable);
+	}
+
+	public function scopeName($query, $variable)
+	{
+		if(is_array($variable))
+		{
+			return $query->whereIn('name', $variable);
+		}
+
+		return $query->where('name', $variable);
+	}
+
+	public function scopeOnDate($query, $variable)
+	{
+		if(is_array($variable))
+		{
+			if(!is_null($variable[1]))
+			{
+				return $query->where('on', '<=', date('Y-m-d', strtotime($variable[1])))
+							 ->where('on', '>=', date('Y-m-d', strtotime($variable[0])));
+			}
+			elseif(!is_null($variable[0]))
+			{
+				return $query->where('on', '>=', date('Y-m-d', strtotime($variable[0])));
+			}
+			else
+			{
+				return $query->where('on', '>=', date('Y-m-d'));
+			}
+		}
+		return $query->where('on', '>=', date('Y-m-d', strtotime($variable)));
 	}
 
 	public function scopeWithAttributes($query, $variable)

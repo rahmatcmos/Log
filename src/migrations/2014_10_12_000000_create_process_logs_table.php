@@ -25,6 +25,7 @@ class CreateProcessLogsTable extends Migration {
 			$table->time('schedule_end');
 			$table->double('margin_start');
 			$table->double('margin_end');
+			$table->double('total_idle');
 			$table->timestamps();
 			$table->softDeletes();
 			

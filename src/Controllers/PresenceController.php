@@ -46,11 +46,11 @@ class PresenceController extends Controller {
 			$attributes['log']					= (array)$attributes['log'];
 			foreach ($attributes['log'] as $key => $value) 
 			{
-				$log['name']					= $value[1];
+				$log['name']					= strtolower($value[1]);
 				$log['on']						= date("Y-m-d H:i:s", strtotime($value[2]));
 				$log['pc']						= $value[3];
 
-				$saved_log 						= $this->dispatch(new Saving(new Log, $log, null, new Person, $value[0]));
+				$saved_log 						= $this->dispatch(new Saving(new Log, $log, null, new Person, $person->data->id));
 				$is_success_2 					= json_decode($saved_log);
 				if(!$is_success_2->meta->success)
 				{
