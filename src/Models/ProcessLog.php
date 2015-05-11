@@ -83,6 +83,8 @@ class ProcessLog extends BaseModel {
 										];
 	public $sortable 				= ['created_at', 'on', 'margin_start', 'margin_end', 'total_idle'];
 
+	protected $appends				= ['has_schedule'];
+
 	/* ---------------------------------------------------------------------------- CONSTRUCT ----------------------------------------------------------------------------*/
 	/**
 	 * boot
@@ -115,7 +117,15 @@ class ProcessLog extends BaseModel {
 	/* ---------------------------------------------------------------------------- MUTATOR ---------------------------------------------------------------------------------*/
 	
 	/* ---------------------------------------------------------------------------- ACCESSOR --------------------------------------------------------------------------------*/
-	
+	public function getHasScheduleAttribute($value)
+    {
+    	if(date("H:i:s", strtotime($this->schedule_start))==date('H:i:s', strtotime('00:00:00')) && date("H:i:s", strtotime($this->schedule_end))==date('H:i:s', strtotime('00:00:00')))
+    	{
+    		return false;
+    	}
+		return true;
+    }
+
 	/* ---------------------------------------------------------------------------- FUNCTIONS -------------------------------------------------------------------------------*/
 	
 	/* ---------------------------------------------------------------------------- SCOPE -------------------------------------------------------------------------------*/
@@ -172,7 +182,8 @@ class ProcessLog extends BaseModel {
 
 	public function scopeGlobal($query, $variable)
 	{
-		return $query->selectRaw('sum(margin_start) as margin_start')
+		return $query->select(['schedule_start', 'schedule_end'])
+					->selectRaw('sum(margin_start) as margin_start')
 					->selectRaw('sum(margin_end) as margin_end')
 					->selectRaw('sum(TIME_TO_SEC(end)) - sum(TIME_TO_SEC(start)) as total_workhour')
 					->selectRaw('avg(TIME_TO_SEC(end)) - avg(TIME_TO_SEC(start)) as average_workhour')

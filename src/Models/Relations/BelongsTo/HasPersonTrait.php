@@ -29,4 +29,19 @@ trait HasPersonTrait {
 	{
 		return $query->WhereHas('person.works.branch', function($q)use($variable){$q->where('name', $variable);});
 	}
+
+	public function ScopeHasNoSchedule($query, $variable)
+	{
+		return $query->whereDoesntHave('person.schedules' ,function($q)use($variable){$q->ondate($variable['on']);});
+	}
+
+	public function ScopeCalendar($query, $variable)
+	{
+		return $query->whereHas('person.calendars' ,function($q)use($variable){$q->start($variable['start'])->id($variable['id']);});
+	}
+
+	public function ScopeWorkCalendar($query, $variable)
+	{
+		return $query->whereHas('person' ,function($q)use($variable){$q->CheckWork(true)->WorkCalendar(['start' => $variable['start'], 'id' => $variable['id']]);});
+	}
 }
