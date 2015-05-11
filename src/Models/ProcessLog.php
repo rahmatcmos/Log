@@ -75,6 +75,7 @@ class ProcessLog extends BaseModel {
 											'earlier' 					=> 'Earlier', 
 											'overtime' 					=> 'Overtime', 
 											'global' 					=> 'Global', 
+											'local' 					=> 'Local', 
 											'charttag' 					=> 'ChartTag', 
 											'branchname' 				=> 'BranchName', 
 											'orderworkhour' 			=> 'OrderWorkHour', 
@@ -190,6 +191,12 @@ class ProcessLog extends BaseModel {
 					->selectRaw('sum(TIME_TO_SEC(total_idle)) as total_idle')
 					->selectRaw('person_id')
 					->groupBy('person_id');
+	}
+
+	public function scopeLocal($query, $variable)
+	{
+		return $query->selectRaw('*')
+					->selectRaw('(TIME_TO_SEC(end)) - (TIME_TO_SEC(start)) as total_workhour');
 	}
 
 	public function scopeWithAttributes($query, $variable)
