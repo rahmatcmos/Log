@@ -166,26 +166,17 @@ class ProcessingLogObserver
 				}
 				else
 				{
-					$pcalendar 		= Person::ID($model['attributes']['person_id'])->calendar(['start' => $on])->calendarschedule(['on' => [$on, $on]])->withAttributes(['calendars', 'calendars.schedules'])->first();
-					if($pcalendar)
+					$ccalendar 	= Person::ID($model['attributes']['person_id'])->CheckWork(true)->WorkCalendar(['start' => $on])->WorkCalendarschedule(['on' => [$on, $on]])->withAttributes(['works','works.calendar', 'works.calendar.schedules'])->first();
+					if($ccalendar)
 					{
-						$schedule_start	= $pcalendar->calendars[0]->schedules[0]->start;
-						$schedule_end	= $pcalendar->calendars[0]->schedules[0]->end;
+						$schedule_start	= $ccalendar->works[0]->calendar->schedules[0]->start;
+						$schedule_end	= $ccalendar->works[0]->calendar->schedules[0]->end;
 					}
 					else
 					{
-						$ccalendar 	= Person::ID($model['attributes']['person_id'])->CheckWork(true)->WorkCalendar(['start' => $on])->WorkCalendarschedule(['on' => [$on, $on]])->withAttributes(['works','works.calendars', 'works.calendars.schedules'])->first();
-						if($ccalendar)
-						{
-							$schedule_start	= $ccalendar->works[0]->calendars[0]->schedules[0]->start;
-							$schedule_end	= $ccalendar->works[0]->calendars[0]->schedules[0]->end;
-						}
-						else
-						{
-							//wait for company policies
-							$schedule_start = '00:00:00';
-							$schedule_end 	= '00:00:00';
-						}
+						//wait for company policies
+						$schedule_start = '00:00:00';
+						$schedule_end 	= '00:00:00';
 					}
 				}
 

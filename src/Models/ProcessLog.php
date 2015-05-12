@@ -7,7 +7,7 @@ use DB;
  * Document Model:
  * 	ID 								: Auto Increment, Integer, PK
  * 	person_id 						: Foreign Key From Person, Integer, Required
- * 	person_calendar_id 				: Foreign Key From PersonCalendar, Integer, Required
+ * 	work_id 						: Foreign Key From Work, Integer, Required
  * 	name 		 					: Required max 255
  * 	on 		 						: Required, Date
  * 	start 		 					: Required, Time
@@ -27,7 +27,7 @@ use DB;
  	2 Relationships belongsTo 
 	{
 		Person
-		PersonCalendar
+		Work
 	}
 
  * ---------------------------------------------------------------------- */
@@ -38,7 +38,7 @@ class ProcessLog extends BaseModel {
 
 	use SoftDeletes;
 	use \ThunderID\Log\Models\Relations\BelongsTo\HasPersonTrait;
-	use \ThunderID\Log\Models\Relations\BelongsTo\HasPersonCalendarTrait;
+	use \ThunderID\Log\Models\Relations\BelongsTo\HasWorkTrait;
 
 	public 		$timestamps 		= true;
 
