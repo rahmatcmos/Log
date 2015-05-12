@@ -16,7 +16,7 @@ class CreateProcessLogsTable extends Migration {
 		{
 			$table->increments('id');
 			$table->integer('person_id')->unsigned()->index();
-			$table->integer('person_calendar_id')->unsigned()->index();
+			$table->integer('work_id')->unsigned()->index();
 			$table->string('name', 255);
 			$table->date('on');
 			$table->time('start');

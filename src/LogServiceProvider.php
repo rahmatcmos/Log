@@ -22,6 +22,7 @@ class LogServiceProvider extends ServiceProvider {
 		\ThunderID\Log\Models\Log::observe(new \ThunderID\Log\Models\Observers\LogObserver);
 		\ThunderID\Log\Models\Log::observe(new \ThunderID\Log\Models\Observers\ProcessingLogObserver);
 		\ThunderID\Log\Models\ProcessLog::observe(new \ThunderID\Log\Models\Observers\ProcessLogObserver);
+		\ThunderID\Log\Models\ErrorLog::observe(new \ThunderID\Log\Models\Observers\ErrorLogObserver);
 	}
 
 	/**
@@ -34,6 +35,7 @@ class LogServiceProvider extends ServiceProvider {
 		\ThunderID\Log\Models\Log::observe(new \ThunderID\Log\Models\Observers\LogObserver);
 		\ThunderID\Log\Models\Log::observe(new \ThunderID\Log\Models\Observers\ProcessingLogObserver);
 		\ThunderID\Log\Models\ProcessLog::observe(new \ThunderID\Log\Models\Observers\ProcessLogObserver);
+		\ThunderID\Log\Models\ErrorLog::observe(new \ThunderID\Log\Models\Observers\ErrorLogObserver);
 	}
 
 	/**
