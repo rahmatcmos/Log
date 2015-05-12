@@ -5,6 +5,7 @@ use Illuminate\Database\Eloquent\Model;
 use ThunderID\Log\Models\Log;
 use ThunderID\Person\Models\Person;
 use \Faker\Factory, Illuminate\Support\Facades\DB;
+use \DateTime, \DateInterval, \DatePeriod;
 
 class LogTableSeeder extends Seeder
 {
@@ -21,41 +22,50 @@ class LogTableSeeder extends Seeder
 			foreach(range(1, $total_persons) as $index)
 			{
 				$person 							= Person::find($index);
+				$rand 								= rand(0,2);
+				$begin 								= new DateTime( 'first day of january 2015' );
+				$ended 								= new DateTime( 'last day of december 2015'  );
 
-				foreach(range(1, 8) as $index2)
+				$interval 							= DateInterval::createFromDateString('1 day');
+				$periods 							= new DatePeriod($begin, $interval, $ended);
+
+				foreach ( $periods as $period )
 				{
-					if($index2==1)
+					foreach(range(1, 8) as $index2)
 					{
-						$state 						= 1;
-						$time 						= 'hour';
-					}
-					elseif($index2==8)
-					{
-						$state						= 2;
-						$time 						= 'hours';
-					}
-					else
-					{
-						$state 						= rand(2,5);
-						$time 						= 'hours';
-					}
+						if($index2==1)
+						{
+							$state 						= 1;
+							$time 						= 'hour';
+						}
+						elseif($index2==8)
+						{
+							$state						= 2;
+							$time 						= 'hours';
+						}
+						else
+						{
+							$state 						= rand(2,5);
+							$time 						= 'hours';
+						}
 
-					$rand 							= rand(0,6);
-					$data 							= new Log;
-					$data->fill([
-						'name'						=> $logs[$state],
-						'on'						=> date("Y-m-d H:i:s", strtotime('+ '.$index2.' '.$time)),
-						'pc'						=> $pcs[$rand],
-					]);
+						$rand 							= rand(0,6);
+						$data 							= new Log;
+						$data->fill([
+							'name'						=> $logs[$state],
+							'on'						=> date("Y-m-d H:i:s", strtotime($period->format('Y-m-d').' + '.$index2.' '.$time)),
+							'pc'						=> $pcs[$rand],
+						]);
 
-					$data->Person()->associate($person);
+						$data->Person()->associate($person);
 
-					if (!$data->save())
-					{
-						print_r($data->getError());
-						exit;
+						if (!$data->save())
+						{
+							print_r($data->getError());
+							exit;
+						}
 					}
-				}
+				} 
 			} 
 		}
 		catch (Exception $e) 
