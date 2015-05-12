@@ -166,11 +166,12 @@ class ProcessingLogObserver
 				}
 				else
 				{
-					$ccalendar 	= Person::ID($model['attributes']['person_id'])->CheckWork(true)->WorkCalendar(['start' => $on])->WorkCalendarschedule(['on' => [$on, $on]])->withAttributes(['works','works.calendar', 'works.calendar.schedules'])->first();
+					$ccalendar 	= Person::ID($model['attributes']['person_id'])->CheckWork(true)->WorkCalendar(true)->WorkCalendarschedule(['on' => [$on, $on]])->withAttributes(['workscalendars','workscalendars.calendar', 'workscalendars.calendar.schedules'])->first();
+				
 					if($ccalendar)
 					{
-						$schedule_start	= $ccalendar->works[0]->calendar->schedules[0]->start;
-						$schedule_end	= $ccalendar->works[0]->calendar->schedules[0]->end;
+						$schedule_start	= $ccalendar->workscalendars[0]->calendar->schedules[0]->start;
+						$schedule_end	= $ccalendar->workscalendars[0]->calendar->schedules[0]->end;
 					}
 					else
 					{
@@ -181,7 +182,7 @@ class ProcessingLogObserver
 				}
 
 				$data->fill([
-									'name'			=> 'Login (Temporary)',
+									'name'			=> 'Attendance',
 									'on'			=> $on,
 									'start'			=> $time,
 									'schedule_start'=> date('H:i:s',strtotime($schedule_start)),
