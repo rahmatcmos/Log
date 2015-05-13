@@ -8,10 +8,7 @@ use Illuminate\Support\MessageBag;
 
 /* ----------------------------------------------------------------------
  * Event:
- * 	Creating						
- * 	Saving						
- * 	Updating						
- * 	Deleting						
+ * 	Saved						
  * ---------------------------------------------------------------------- */
 
 class ProcessingLogObserver 

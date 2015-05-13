@@ -35,27 +35,30 @@ class ErrorLog extends BaseModel {
 	public 		$timestamps 		= true;
 
 	protected 	$table 				= 'error_logs';
-	protected 	$fillable			= [
-										'email' 						,
-										'name' 							,
-										'on' 							,
-										'pc' 							,
-										'message' 						,
-									];
 
-	protected 	$rules				= [
-										'email'							=> 'max:255',
-										'name'							=> 'max:255',
-										'on'							=> 'date_format:"Y-m-d H:i:s"',
-										'pc'							=> 'max:255',
-									];
+	protected 	$fillable			= 	[
+											'email' 					,
+											'name' 						,
+											'on' 						,
+											'pc' 						,
+											'message' 					,
+										];
+
+	protected 	$rules				= 	[
+											'email'						=> 'max:255',
+											'name'						=> 'max:255',
+											'on'						=> 'date_format:"Y-m-d H:i:s"',
+											'pc'						=> 'max:255',
+										];
+
 	public $searchable 				= 	[
 											'id' 						=> 'ID', 
 											'organisationid' 			=> 'OrganisationID', 
 											'name' 						=> 'Name', 
 											'withattributes' 			=> 'WithAttributes'
 										];
-	public $sortable 				= ['created_at'];
+										
+	public $sortable 				= 	['created_at'];
 
 	/* ---------------------------------------------------------------------------- CONSTRUCT ----------------------------------------------------------------------------*/
 	/**

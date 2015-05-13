@@ -33,24 +33,27 @@ class Log extends BaseModel {
 	public 		$timestamps 		= true;
 
 	protected 	$table 				= 'logs';
-	protected 	$fillable			= [
-										'name' 							,
-										'on' 							,
-										'pc' 							,
-									];
 
-	protected 	$rules				= [
-										'name'							=> 'required|max:255',
-										'on'							=> 'required|date_format:"Y-m-d H:i:s"',
-										'pc'							=> 'required|max:255',
-									];
+	protected 	$fillable			= 	[
+											'name' 							,
+											'on' 							,
+											'pc' 							,
+										];
+
+	protected 	$rules				= 	[
+											'name'							=> 'required|max:255',
+											'on'							=> 'required|date_format:"Y-m-d H:i:s"',
+											'pc'							=> 'required|max:255',
+										];
+
 	public $searchable 				= 	[
 											'id' 						=> 'ID', 
 											'personid' 					=> 'PersonID', 
 											'name' 						=> 'Name', 
 											'withattributes' 			=> 'WithAttributes'
 										];
-	public $sortable 				= ['created_at'];
+										
+	public $sortable 				= 	['created_at'];
 
 	/* ---------------------------------------------------------------------------- CONSTRUCT ----------------------------------------------------------------------------*/
 	/**

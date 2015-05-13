@@ -6,19 +6,12 @@ use ThunderID\Person\Models\Person;
 
 /* ----------------------------------------------------------------------
  * Event:
- * 	Creating						
  * 	Saving						
- * 	Updating						
  * 	Deleting						
  * ---------------------------------------------------------------------- */
 
 class LogObserver 
 {
-	public function creating($model)
-	{
-		//
-	}
-
 	public function saving($model)
 	{
 		$validator 				= Validator::make($model['attributes'], $model['rules']);
@@ -33,11 +26,6 @@ class LogObserver
 
 			return false;
 		}
-	}
-
-	public function updating($model)
-	{
-		//
 	}
 
 	public function deleting($model)

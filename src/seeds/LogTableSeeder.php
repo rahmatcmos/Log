@@ -35,26 +35,26 @@ class LogTableSeeder extends Seeder
 					{
 						if($index2==1)
 						{
-							$state 						= 1;
-							$time 						= 'hour';
+							$state 					= 1;
+							$time 					= 'hour';
 						}
 						elseif($index2==8)
 						{
-							$state						= 2;
-							$time 						= 'hours';
+							$state					= 2;
+							$time 					= 'hours';
 						}
 						else
 						{
-							$state 						= rand(2,5);
-							$time 						= 'hours';
+							$state 					= rand(2,5);
+							$time 					= 'hours';
 						}
 
-						$rand 							= rand(0,6);
-						$data 							= new Log;
+						$rand 						= rand(0,6);
+						$data 						= new Log;
 						$data->fill([
-							'name'						=> $logs[$state],
-							'on'						=> date("Y-m-d H:i:s", strtotime($period->format('Y-m-d').' + '.$index2.' '.$time)),
-							'pc'						=> $pcs[$rand],
+							'name'					=> $logs[$state],
+							'on'					=> date("Y-m-d H:i:s", strtotime($period->format('Y-m-d').' + '.$index2.' '.$time)),
+							'pc'					=> $pcs[$rand],
 						]);
 
 						$data->Person()->associate($person);

@@ -211,11 +211,11 @@ class ProcessLog extends BaseModel {
 
 	public function scopeOrderWorkHour($query, $variable)
 	{
-		return $query->orderBy(DB::Raw('sum(TIME_TO_SEC(end)) - sum(TIME_TO_SEC(start))'));
+		return $query->orderBy(DB::Raw('sum(TIME_TO_SEC(end)) - sum(TIME_TO_SEC(start))'), $variable);
 	}
 
 	public function scopeOrderAverageWorkHour($query, $variable)
 	{
-		return $query->orderBy(DB::Raw('avg(TIME_TO_SEC(end)) - avg(TIME_TO_SEC(start))'));
+		return $query->orderBy(DB::Raw('avg(TIME_TO_SEC(end)) - avg(TIME_TO_SEC(start))'), $variable);
 	}
 }
