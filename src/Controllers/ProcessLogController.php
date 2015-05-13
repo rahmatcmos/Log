@@ -18,7 +18,7 @@ class ProcessLogController extends Controller {
 	 * @return void
 	 * @author 
 	 **/
-	function index($page = 1, $search = null, $sort = null, $all = false)
+	public function index($page = 1, $search = null, $sort = null, $all = false)
 	{
 		$per_page 								= 12;
 
