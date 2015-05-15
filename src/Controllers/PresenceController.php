@@ -67,7 +67,7 @@ class PresenceController extends Controller {
 					if(!$is_success_2->meta->success)
 					{
 						$log['email']			= $value[0];
-						$log['message']			= json_encode($is_success_2->meta->errors);
+						$log['message']			= $is_success_2->meta->errors;
 						$saved_error_log 		= $this->dispatch(new Saving(new ErrorLog, $log, null, new Organisation, 1));
 					}
 				}
