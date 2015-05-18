@@ -30,7 +30,7 @@ class LogObserver
 
 	public function deleting($model)
 	{
-		$model['errors'] 	= ['Tidak dapat menghapus data log.'];
+		$model['errors'] 		= ['Tidak dapat menghapus data log.'];
 
 		return false;
 	}

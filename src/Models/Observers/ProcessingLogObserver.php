@@ -44,7 +44,7 @@ class ProcessingLogObserver
 
 					$end 			= $hours*3600+$minutes*60+$seconds;
 
-					$schedule_end = $data->schedule_end;
+					$schedule_end 	= $data->schedule_end;
 					list($hours, $minutes, $seconds) = explode(":", $schedule_end);
 
 					$schedule_end	= $hours*3600+$minutes*60+$seconds;
@@ -53,6 +53,8 @@ class ProcessingLogObserver
 					
 					$idle 			= Log::ondate($on)->personid($model['attributes']['person_id'])->orderBy('on', 'asc')->get();
 					$total_idle 	= 0;
+					$total_sleep 	= 0;
+					$total_active 	= $end - $start;
 
 					foreach ($idle as $key => $value) 
 					{
@@ -73,15 +75,82 @@ class ProcessingLogObserver
 							$total_idle	= $total_idle + $new_idle - $start_idle;
 							unset($start_idle);
 						}
+
+						if(strtolower($value['name']) == 'sleep')
+						{
+							$start_sleep = date('H:i:s', strtotime($value['on']));
+							list($hours, $minutes, $seconds) = explode(":", $start_sleep);
+
+							$start_sleep = $hours*3600+$minutes*60+$seconds;
+						}
+						elseif(strtolower($value['name'] != 'sleep') && isset($start_sleep))
+						{
+							$new_sleep 	= date('H:i:s', strtotime($value['on']));
+							list($hours, $minutes, $seconds) = explode(":", $new_sleep);
+
+							$new_sleep 	= $hours*3600+$minutes*60+$seconds;
+
+							$total_sleep= $total_sleep + $new_sleep - $start_sleep;
+							unset($start_sleep);
+						}
 					}
 
-					$data->fill([
-										'end'			=> $time,
-										'margin_start'	=> $margin_start,
-										'margin_end'	=> $margin_end,
-										'total_idle'	=> $total_idle,
-								]
-					);
+					$total_active 	= $total_active - $total_sleep - $total_idle;
+
+					if(strtolower($model['attributes']['name'])=='presence')
+					{
+						if($data->fp_start!='00:00:00' && $data->fp_start > $time)
+						{
+							$data->fill([
+												'fp_start'		=> $time,
+												'fp_end'		=> $data->fp_start,
+												'margin_start'	=> $margin_start,
+												'margin_end'	=> $margin_end,
+												'total_idle'	=> $total_idle,
+												'total_sleep'	=> $total_sleep,
+												'total_active'	=> $total_active,
+										]
+							);
+						}
+						elseif($data->fp_start!='00:00:00' && $data->fp_start <= $time)
+						{
+							$data->fill([
+												'fp_start'		=> $data->fp_start,
+												'fp_end'		=> $time,
+												'margin_start'	=> $margin_start,
+												'margin_end'	=> $margin_end,
+												'total_idle'	=> $total_idle,
+												'total_sleep'	=> $total_sleep,
+												'total_active'	=> $total_active,
+										]
+							);
+						}
+						else
+						{
+							$data->fill([
+												'fp_start'		=> $time,
+												'margin_start'	=> $margin_start,
+												'margin_end'	=> $margin_end,
+												'total_idle'	=> $total_idle,
+												'total_sleep'	=> $total_sleep,
+												'total_active'	=> $total_active,
+										]
+							);
+						}
+					}
+					else
+					{
+						$data->fill([
+											'end'			=> $time,
+											'margin_start'	=> $margin_start,
+											'margin_end'	=> $margin_end,
+											'total_idle'	=> $total_idle,
+											'total_sleep'	=> $total_sleep,
+											'total_active'	=> $total_active,
+									]
+						);
+					}
+					
 				}
 				elseif($data->start > $time)
 				{
@@ -102,7 +171,7 @@ class ProcessingLogObserver
 
 					$end 			= $hours*3600+$minutes*60+$seconds;
 
-					$schedule_end = $data->schedule_end;
+					$schedule_end 	= $data->schedule_end;
 					list($hours, $minutes, $seconds) = explode(":", $schedule_end);
 
 					$schedule_end	= $hours*3600+$minutes*60+$seconds;
@@ -111,6 +180,8 @@ class ProcessingLogObserver
 					
 					$idle 			= Log::ondate($on)->personid($model['attributes']['person_id'])->orderBy('on', 'asc')->get();
 					$total_idle 	= 0;
+					$total_sleep 	= 0;
+					$total_active 	= $end - $start;
 
 					foreach ($idle as $key => $value) 
 					{
@@ -131,15 +202,81 @@ class ProcessingLogObserver
 							$total_idle	= $total_idle + $new_idle - $start_idle;
 							unset($start_idle);
 						}
+
+						if(strtolower($value['name']) == 'sleep')
+						{
+							$start_sleep = date('H:i:s', strtotime($value['on']));
+							list($hours, $minutes, $seconds) = explode(":", $start_sleep);
+
+							$start_sleep = $hours*3600+$minutes*60+$seconds;
+						}
+						elseif(strtolower($value['name'] != 'sleep') && isset($start_sleep))
+						{
+							$new_sleep 	= date('H:i:s', strtotime($value['on']));
+							list($hours, $minutes, $seconds) = explode(":", $new_sleep);
+
+							$new_sleep 	= $hours*3600+$minutes*60+$seconds;
+
+							$total_sleep= $total_sleep + $new_sleep - $start_sleep;
+							unset($start_sleep);
+						}
 					}
 
-					$data->fill([
+					$total_active 	= $total_active - $total_sleep - $total_idle;
+
+					if(strtolower($model['attributes']['name'])=='presence')
+					{
+						if($data->fp_start!='00:00:00' && $data->fp_start > $time)
+						{
+							$data->fill([
+												'fp_start'		=> $time,
+												'fp_end'		=> $data->fp_start,
+												'margin_start'	=> $margin_start,
+												'margin_end'	=> $margin_end,
+												'total_idle'	=> $total_idle,
+												'total_sleep'	=> $total_sleep,
+												'total_active'	=> $total_active,
+										]
+							);
+						}
+						elseif($data->fp_start!='00:00:00' && $data->fp_start <= $time)
+						{
+							$data->fill([
+												'fp_start'		=> $data->fp_start,
+												'fp_end'		=> $time,
+												'margin_start'	=> $margin_start,
+												'margin_end'	=> $margin_end,
+												'total_idle'	=> $total_idle,
+												'total_sleep'	=> $total_sleep,
+												'total_active'	=> $total_active,
+										]
+							);
+						}
+						else
+						{
+							$data->fill([
+												'fp_start'		=> $time,
+												'margin_start'	=> $margin_start,
+												'margin_end'	=> $margin_end,
+												'total_idle'	=> $total_idle,
+												'total_sleep'	=> $total_sleep,
+												'total_active'	=> $total_active,
+										]
+							);
+						}
+					}
+					else
+					{
+						$data->fill([
 										'start'			=> $time,
 										'margin_start'	=> $margin_start,
 										'margin_end'	=> $margin_end,
 										'total_idle'	=> $total_idle,
+										'total_sleep'	=> $total_sleep,
+										'total_active'	=> $total_active,
 								]
-					);
+						);
+					}
 				}
 
 				if (!$data->save())
@@ -178,14 +315,28 @@ class ProcessingLogObserver
 					}
 				}
 
-				$data->fill([
-									'name'			=> 'Attendance',
-									'on'			=> $on,
-									'start'			=> $time,
-									'schedule_start'=> date('H:i:s',strtotime($schedule_start)),
-									'schedule_end'	=> date('H:i:s',strtotime($schedule_end)),
-							]
-				);
+				if(strtolower($model['attributes']['name'])=='presence')
+				{
+					$data->fill([
+										'name'			=> 'Attendance',
+										'on'			=> $on,
+										'fp_start'		=> $time,
+										'schedule_start'=> date('H:i:s',strtotime($schedule_start)),
+										'schedule_end'	=> date('H:i:s',strtotime($schedule_end)),
+								]
+					);
+				}
+				else
+				{
+					$data->fill([
+										'name'			=> 'Attendance',
+										'on'			=> $on,
+										'start'			=> $time,
+										'schedule_start'=> date('H:i:s',strtotime($schedule_start)),
+										'schedule_end'	=> date('H:i:s',strtotime($schedule_end)),
+								]
+					);
+				}
 
 				$data->Person()->associate($person);
 				if (!$data->save())

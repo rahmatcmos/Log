@@ -13,10 +13,11 @@ class LogTableSeeder extends Seeder
 	{
 
 		DB::table('logs')->truncate();
+		DB::table('process_logs')->truncate();
 		$faker 										= Factory::create();
 		$total_persons  							= Person::count();
-		$logs 										= ['login', 'logout','sleep', 'idle', 'lock', 'working'];
-		$pcs 										= ['redhat', 'ubuntu', 'debian', 'mint', 'centos', '7', 'xp'];
+		$logs 										= ['login', 'logout','sleep', 'idle', 'lock', 'working', 'presence', 'presence', 'presence'];
+		$pcs 										= ['redhat', 'ubuntu', 'debian', 'mint', 'centos', '7', 'xp', 'fp', 'fp', 'fp'];
 		try
 		{
 			foreach(range(1, $total_persons) as $index)
@@ -24,7 +25,7 @@ class LogTableSeeder extends Seeder
 				$person 							= Person::find($index);
 				$rand 								= rand(0,2);
 				$begin 								= new DateTime( 'first day of january 2015' );
-				$ended 								= new DateTime( 'last day of december 2015'  );
+				$ended 								= new DateTime( 'last day of june 2015'  );
 
 				$interval 							= DateInterval::createFromDateString('1 day');
 				$periods 							= new DatePeriod($begin, $interval, $ended);
@@ -35,21 +36,21 @@ class LogTableSeeder extends Seeder
 					{
 						if($index2==1)
 						{
-							$state 					= 1;
+							$state 					= 0;
 							$time 					= 'hour';
 						}
 						elseif($index2==8)
 						{
-							$state					= 2;
+							$state					= 1;
 							$time 					= 'hours';
 						}
 						else
 						{
-							$state 					= rand(2,5);
+							$state 					= rand(2,8);
 							$time 					= 'hours';
 						}
 
-						$rand 						= rand(0,6);
+						$rand 						= rand(0,8);
 						$data 						= new Log;
 						$data->fill([
 							'name'					=> $logs[$state],

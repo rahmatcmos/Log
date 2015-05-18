@@ -21,11 +21,15 @@ class CreateProcessLogsTable extends Migration {
 			$table->date('on');
 			$table->time('start');
 			$table->time('end');
+			$table->time('fp_start');
+			$table->time('fp_end');
 			$table->time('schedule_start');
 			$table->time('schedule_end');
 			$table->double('margin_start');
 			$table->double('margin_end');
 			$table->double('total_idle');
+			$table->double('total_sleep');
+			$table->double('total_active');
 			$table->timestamps();
 			$table->softDeletes();
 			
