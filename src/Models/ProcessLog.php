@@ -96,7 +96,7 @@ class ProcessLog extends BaseModel {
 										];
 	public $sortable 				= ['created_at', 'on', 'margin_start', 'margin_end', 'total_idle', 'person_id'];
 
-	protected $appends				= ['has_schedule'];
+	protected $appends				= ['has_schedule', 'notes'];
 
 	/* ---------------------------------------------------------------------------- CONSTRUCT ----------------------------------------------------------------------------*/
 	/**
@@ -138,6 +138,29 @@ class ProcessLog extends BaseModel {
     	}
 		return true;
     }
+
+	public function getNotesAttribute($value)
+    {
+		if($this->margin_start < 0)
+		{
+			$notes[] = 'late';
+		}
+		elseif($this->margin_start >= 0)
+		{
+			$notes[] = 'ontime';
+		}
+
+		if($this->margin_end < 0)
+		{
+			$notes[] = 'earlier';
+		}
+		elseif($this->margin_end > 0)
+		{
+			$notes[] = 'overtime';
+		}
+
+		return $notes;
+	}
 
 	/* ---------------------------------------------------------------------------- FUNCTIONS -------------------------------------------------------------------------------*/
 	
