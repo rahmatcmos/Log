@@ -27,7 +27,23 @@ class ProcessingLogObserver
 			{
 				if($data->start <= $time)
 				{
-					$start 			= $data->start;
+					if($data->start=='00:00:00')
+					{
+						$start 		= min($time, $data->fp_start);
+					}
+					elseif($data->fp_start=='00:00:00')
+					{
+						$start 		= min($time, $data->start);
+					}
+					elseif($time=='00:00:00')
+					{
+						$start 		= min($data->start, $data->fp_start);
+					}
+					else
+					{
+						$start 		= min($time, $data->start, $data->fp_start);
+					}
+
 					list($hours, $minutes, $seconds) = explode(":", $start);
 
 					$start 			= $hours*3600+$minutes*60+$seconds;
@@ -39,7 +55,8 @@ class ProcessingLogObserver
 
 					$margin_start 	= $schedule_start - $start;
 
-					$end 			= $data->end;
+					$end 			= max($data->end, $data->fp_end, $data->fp_start, $data->start, $time);
+
 					list($hours, $minutes, $seconds) = explode(":", $end);
 
 					$end 			= $hours*3600+$minutes*60+$seconds;
@@ -154,7 +171,23 @@ class ProcessingLogObserver
 				}
 				elseif($data->start > $time)
 				{
-					$start 			= $data->start;
+					if($data->start=='00:00:00')
+					{
+						$start 		= min($time, $data->fp_start);
+					}
+					elseif($data->fp_start=='00:00:00')
+					{
+						$start 		= min($time, $data->start);
+					}
+					elseif($time=='00:00:00')
+					{
+						$start 		= min($data->start, $data->fp_start);
+					}
+					else
+					{
+						$start 		= min($time, $data->start, $data->fp_start);
+					}
+
 					list($hours, $minutes, $seconds) = explode(":", $start);
 
 					$start 			= $hours*3600+$minutes*60+$seconds;
@@ -166,7 +199,8 @@ class ProcessingLogObserver
 
 					$margin_start 	= $schedule_start - $start;
 
-					$end 			= $data->end;
+					$end 			= max($data->end, $data->fp_end, $data->fp_start, $data->start, $time);
+
 					list($hours, $minutes, $seconds) = explode(":", $end);
 
 					$end 			= $hours*3600+$minutes*60+$seconds;
