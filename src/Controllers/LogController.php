@@ -10,7 +10,7 @@ use \ThunderID\Commoquent\Saving;
 use \ThunderID\Commoquent\Deleting;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\DB;
-use App, Response;
+use App, Response, Device;
 
 class LogController extends Controller {
 
@@ -31,7 +31,8 @@ class LogController extends Controller {
 		}
 
 		$api 									= $attributes['application']['api'];
-		if($api['client']!='123456789' || $api['secret']!='123456789')
+		$checking 								= Device::checking($api['client'], $api['secret']);
+		if(!$checking)
 		{
 			return Response::json(['message' => 'Not Found'], 404);
 		}
