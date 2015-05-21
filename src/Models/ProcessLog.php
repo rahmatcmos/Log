@@ -219,11 +219,26 @@ class ProcessLog extends BaseModel {
 	public function scopeGlobal($query, $variable)
 	{
 		return $query->select(['schedule_start', 'schedule_end'])
-					->selectRaw('sum(margin_start) as margin_start')
-					->selectRaw('sum(margin_end) as margin_end')
-					->selectRaw('sum(TIME_TO_SEC(end)) - sum(TIME_TO_SEC(start)) as total_workhour')
-					->selectRaw('avg(TIME_TO_SEC(end)) - avg(TIME_TO_SEC(start)) as average_workhour')
-					->selectRaw('sum(TIME_TO_SEC(total_idle)) as total_idle')
+					->selectRaw('avg(margin_start) as margin_start')
+					->selectRaw('avg(margin_end) as margin_end')
+
+					->selectRaw('avg(TIME_TO_SEC(start)) as avg_start')
+					->selectRaw('sum(TIME_TO_SEC(start)) as start')
+					->selectRaw('avg(TIME_TO_SEC(end)) as avg_end')
+					->selectRaw('sum(TIME_TO_SEC(end)) as end')
+
+					->selectRaw('avg(TIME_TO_SEC(fp_start)) as avg_fp_start')
+					->selectRaw('sum(TIME_TO_SEC(fp_start)) as fp_start')
+					->selectRaw('avg(TIME_TO_SEC(fp_end)) as avg_fp_end')
+					->selectRaw('sum(TIME_TO_SEC(fp_end)) as fp_end')
+
+					->selectRaw('sum(total_idle) as total_idle')
+					->selectRaw('avg(total_idle) as avg_idle')
+					->selectRaw('sum(total_sleep) as total_sleep')
+					->selectRaw('avg(total_sleep) as avg_sleep')
+					->selectRaw('sum(total_active) as total_active')
+					->selectRaw('avg(total_active) as avg_active')
+
 					->selectRaw('person_id')
 					->groupBy('person_id');
 	}
