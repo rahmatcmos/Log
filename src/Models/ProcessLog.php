@@ -94,7 +94,7 @@ class ProcessLog extends BaseModel {
 											'orderavgworkhour' 			=> 'OrderAverageWorkHour', 
 											'withattributes' 			=> 'WithAttributes'
 										];
-	public $sortable 				= ['created_at', 'on', 'margin_start', 'margin_end', 'total_idle', 'person_id'];
+	public $sortable 				= ['created_at', 'on', 'margin_start', 'margin_end', 'total_idle', 'person_id', 'total_active', 'total_sleep'];
 
 	protected $appends				= ['has_schedule', 'notes'];
 
@@ -154,7 +154,7 @@ class ProcessLog extends BaseModel {
 		{
 			$notes[] = 'earlier';
 		}
-		elseif($this->margin_end > 0)
+		elseif($this->margin_end > 3600)
 		{
 			$notes[] = 'overtime';
 		}

@@ -324,18 +324,17 @@ class ProcessingLogObserver
 			}
 			else
 			{
-				$data 				= new ProcessLog;
-				$person 			= Person::find($model['attributes']['person_id']);
-				$pschedule 			= Person::ID($model['attributes']['person_id'])->schedule(['on' => $on])->withAttributes(['schedules'])->first();
+				$data 					= new ProcessLog;
+				$person 				= Person::find($model['attributes']['person_id']);
+				$pschedule 				= Person::ID($model['attributes']['person_id'])->schedule(['on' => $on])->withAttributes(['schedules'])->first();
 				if($pschedule)
 				{
-					$schedule_start	= $pschedule->schedules[0]->start;
-					$schedule_end	= $pschedule->schedules[0]->end;
+					$schedule_start		= $pschedule->schedules[0]->start;
+					$schedule_end		= $pschedule->schedules[0]->end;
 				}
 				else
 				{
-					$ccalendar 	= Person::ID($model['attributes']['person_id'])->CheckWork(true)->WorkCalendar(true)->WorkCalendarschedule(['on' => [$on, $on]])->withAttributes(['workscalendars','workscalendars.calendar', 'workscalendars.calendar.schedules'])->first();
-				
+					$ccalendar 			= Person::ID($model['attributes']['person_id'])->CheckWork(true)->WorkCalendar(true)->WorkCalendarschedule(['on' => [$on, $on]])->withAttributes(['workscalendars','workscalendars.calendar', 'workscalendars.calendar.schedules'])->first();
 					if($ccalendar)
 					{
 						$schedule_start	= $ccalendar->workscalendars[0]->calendar->schedules[0]->start;
@@ -343,9 +342,18 @@ class ProcessingLogObserver
 					}
 					else
 					{
-						//wait for company policies
-						$schedule_start = '00:00:00';
-						$schedule_end 	= '00:00:00';
+						$calendar 		= Person::ID($model['attributes']['person_id'])->CheckWork(true)->WorkCalendar(true)->withAttributes(['workscalendars','workscalendars.calendar'])->first();
+						if($calendar)
+						{
+							$schedule_start = $calendar->workscalendars[0]->calendar->start;
+							$schedule_end 	= $calendar->workscalendars[0]->calendar->end;	
+						}
+						else
+						{
+							//wait for company policies
+							$schedule_start = '00:00:00';
+							$schedule_end 	= '00:00:00';
+						}
 					}
 				}
 
