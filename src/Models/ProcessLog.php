@@ -63,24 +63,25 @@ class ProcessLog extends BaseModel {
 										'total_active' 					,
 									];
 
-	protected 	$rules				= [
-										'name'							=> 'required|max:255',
-										'on'							=> 'required|date_format:"Y-m-d"',
-										'start'							=> 'date_format:"H:i:s"',
-										'end'							=> 'date_format:"H:i:s"',
-										'fp_start'						=> 'date_format:"H:i:s"',
-										'fp_end'						=> 'date_format:"H:i:s"',
-										'schedule_start'				=> 'required|date_format:"H:i:s"',
-										'schedule_end'					=> 'required|date_format:"H:i:s"',
-										'margin_start'					=> 'numeric',
-										'margin_end'					=> 'numeric',
-										'total_idle'					=> 'numeric',
-										'total_sleep'					=> 'numeric',
-										'total_active'					=> 'numeric',
-									];
+	protected 	$rules				= 	[
+											'name'						=> 'required|max:255',
+											'on'						=> 'required|date_format:"Y-m-d"',
+											'start'						=> 'date_format:"H:i:s"',
+											'end'						=> 'date_format:"H:i:s"',
+											'fp_start'					=> 'date_format:"H:i:s"',
+											'fp_end'					=> 'date_format:"H:i:s"',
+											'schedule_start'			=> 'required|date_format:"H:i:s"',
+											'schedule_end'				=> 'required|date_format:"H:i:s"',
+											'margin_start'				=> 'numeric',
+											'margin_end'				=> 'numeric',
+											'total_idle'				=> 'numeric',
+											'total_sleep'				=> 'numeric',
+											'total_active'				=> 'numeric',
+										];
 	public $searchable 				= 	[
 											'id' 						=> 'ID', 
 											'personid' 					=> 'PersonID', 
+											'organisationid' 			=> 'OrganisationID', 
 											'ondate' 					=> 'OnDate', 
 											'late' 						=> 'Late', 
 											'ontime' 					=> 'OnTime', 
@@ -94,9 +95,10 @@ class ProcessLog extends BaseModel {
 											'orderavgworkhour' 			=> 'OrderAverageWorkHour', 
 											'withattributes' 			=> 'WithAttributes'
 										];
-	public $sortable 				= ['created_at', 'on', 'margin_start', 'margin_end', 'total_idle', 'person_id', 'total_active', 'total_sleep'];
+										
+	public $sortable 				= 	['created_at', 'on', 'margin_start', 'margin_end', 'total_idle', 'person_id', 'total_active', 'total_sleep'];
 
-	protected $appends				= ['has_schedule', 'notes'];
+	protected $appends				= 	['has_schedule', 'notes'];
 
 	/* ---------------------------------------------------------------------------- CONSTRUCT ----------------------------------------------------------------------------*/
 	/**

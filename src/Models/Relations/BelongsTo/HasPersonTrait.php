@@ -30,6 +30,11 @@ trait HasPersonTrait {
 		return $query->WhereHas('person.works.branch', function($q)use($variable){$q->where('name', $variable);});
 	}
 
+	public function scopeOrganisationID($query, $variable)
+	{
+		return $query->WhereHas('person.works.branch.organisation', function($q)use($variable){$q->where('id', $variable);});
+	}
+
 	public function ScopeHasNoSchedule($query, $variable)
 	{
 		return $query->whereDoesntHave('person.schedules' ,function($q)use($variable){$q->ondate($variable['on']);});

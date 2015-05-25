@@ -18,15 +18,8 @@ class ProcessLogController extends Controller {
 	 * @return void
 	 * @author 
 	 **/
-	public function index($page = 1, $search = null, $sort = null, $all = false)
+	public function index($page = 1, $search = null, $sort = null, $per_page = 12)
 	{
-		$per_page 								= 12;
-
-		if($all)
-		{
-			$per_page 							= 100;
-		}
-
 		$contents 								= $this->dispatch(new Getting(new ProcessLog, $search, $sort ,(int)$page, $per_page));
 		
 		return $contents;
