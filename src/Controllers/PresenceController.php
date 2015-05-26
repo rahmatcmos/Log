@@ -32,7 +32,7 @@ class PresenceController extends Controller {
 
 		$api 									= $attributes['application']['api'];
 		$checking 								= Device::checking($api['client'], $api['secret']);
-		if(!$checking)
+		if($checking==false)
 		{
 			return Response::json(['message' => 'Not Found'], 404);
 		}
@@ -59,7 +59,7 @@ class PresenceController extends Controller {
 				{
 					$log['email']				= $value[0];
 					$log['message']				= json_encode($person->meta->errors);
-					$saved_error_log 			= $this->dispatch(new Saving(new ErrorLog, $log, null, new Organisation, 1));
+					$saved_error_log 			= $this->dispatch(new Saving(new ErrorLog, $log, null, new Organisation, $checking));
 				}
 				else
 				{
@@ -69,7 +69,7 @@ class PresenceController extends Controller {
 					{
 						$log['email']			= $value[0];
 						$log['message']			= $is_success_2->meta->errors;
-						$saved_error_log 		= $this->dispatch(new Saving(new ErrorLog, $log, null, new Organisation, 1));
+						$saved_error_log 		= $this->dispatch(new Saving(new ErrorLog, $log, null, new Organisation, $checking));
 					}
 				}
 			}
