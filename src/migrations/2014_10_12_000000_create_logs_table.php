@@ -22,7 +22,7 @@ class CreateLogsTable extends Migration {
 			$table->timestamps();
 			$table->softDeletes();
 			
-			$table->index(['deleted_at', 'on', 'name']);
+			$table->index(['deleted_at', 'person_id', 'on']);
 		});
 	}
 

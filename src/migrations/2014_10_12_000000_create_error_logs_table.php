@@ -24,7 +24,7 @@ class CreateErrorLogsTable extends Migration {
 			$table->timestamps();
 			$table->softDeletes();
 			
-			$table->index(['deleted_at', 'on', 'email']);
+			$table->index(['deleted_at', 'organisation_id', 'on']);
 		});
 	}
 
