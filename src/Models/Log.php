@@ -27,7 +27,7 @@ use Str, Validator, DateTime, Exception;
 
 class Log extends BaseModel {
 
-	use SoftDeletes;
+	// use SoftDeletes;
 	use \ThunderID\Log\Models\Relations\BelongsTo\HasPersonTrait;
 
 	public 		$timestamps 		= true;

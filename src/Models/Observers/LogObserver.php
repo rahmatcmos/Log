@@ -30,8 +30,25 @@ class LogObserver
 
 	public function deleting($model)
 	{
-		$model['errors'] 		= ['Tidak dapat menghapus data log.'];
+		if(date('Y-m-d',strtotime($model['attributes']['on'])) <= date('Y-m-d'))
+		{
+			$model['errors'] 	= ['Tidak dapat menghapus log yang sudah lewat dari tanggal hari ini.'];
 
-		return false;
+			return false;
+		}
+
+		$processes 							= ProcessLog::personid($model['attributes']['person_id'])->ondate([date('Y-m-d',strtotime($model['attributes']['on'])), date('Y-m-d',strtotime($model['attributes']['on'].' + 1 Day'))])->get();
+
+		foreach ($processes as $key => $value) 
+		{
+			$process 						= ProcessLog::find($value->id);
+
+			if(!$process->delete())
+			{
+				$model['errors'] 			= $process->getError();
+				
+				return false;
+			}
+		}
 	}
 }

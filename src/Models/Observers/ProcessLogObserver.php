@@ -28,8 +28,11 @@ class ProcessLogObserver
 
 	public function deleting($model)
 	{
-		$model['errors'] 	= ['Tidak dapat menghapus process log.'];
+		if(date('Y-m-d',strtotime($model['attributes']['on'])) <= date('Y-m-d'))
+		{
+			$model['errors'] 	= ['Tidak dapat menghapus log yang sudah lewat dari tanggal hari ini.'];
 
-		return false;
+			return false;
+		}
 	}
 }

@@ -40,7 +40,7 @@ use Str, Validator, DateTime, Exception;
 
 class ProcessLog extends BaseModel {
 
-	use SoftDeletes;
+	// use SoftDeletes;
 	use \ThunderID\Log\Models\Relations\BelongsTo\HasPersonTrait;
 	use \ThunderID\Log\Models\Relations\BelongsTo\HasWorkTrait;
 
