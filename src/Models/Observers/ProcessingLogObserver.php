@@ -22,9 +22,41 @@ class ProcessingLogObserver
 			$on 					= date("Y-m-d", strtotime($model['attributes']['on']));
 			$time 					= date("H:i:s", strtotime($model['attributes']['on']));
 			$data 					= new ProcessLog;
-			$data 					= $data->ondate($on)->personid($model['attributes']['person_id'])->first();
+			$data 					= $data->ondate([$on, $on])->personid($model['attributes']['person_id'])->first();
 			if(isset($data->id))
 			{
+				$result 			= json_decode($data->tooltip);
+				$tooltip 			= json_decode(json_encode($result), true);
+
+				$pschedulee 			= Person::ID($model['attributes']['person_id'])->maxendschedule(['on' => [$on, $on]])->first();
+				$pschedules 			= Person::ID($model['attributes']['person_id'])->minstartschedule(['on' => [$on, $on]])->first();
+				if($pschedulee && $pschedules)
+				{
+					$schedule_start		= $pschedules->schedules[0]->start;
+					$schedule_end		= $pschedulee->schedules[0]->end;
+					if($model['attributes']['name']=='presence_outdoor')
+					{
+						if(!in_array($model['attributes']['name'], $tooltip))
+						{
+							$tooltip[] 		= $model['attributes']['name'];
+						}						
+					}
+					else
+					{
+						foreach($pschedules->schedules as $key => $value)
+						{
+							if(!in_array($value->status, $tooltip))
+							{
+								$tooltip[] 		= $value->status;
+							}
+						}
+					}
+				}
+				else
+				{
+					$schedule_end		= $data->schedule_start;
+					$schedule_start 	= $data->schedule_end;
+				}
 				if($data->start <= $time)
 				{
 					if($data->start=='00:00:00')
@@ -48,7 +80,7 @@ class ProcessingLogObserver
 
 					$start 			= $hours*3600+$minutes*60+$seconds;
 
-					$schedule_start = $data->schedule_start;
+					//$schedule_start = $data->schedule_start;
 					list($hours, $minutes, $seconds) = explode(":", $schedule_start);
 
 					$schedule_start	= $hours*3600+$minutes*60+$seconds;
@@ -61,7 +93,7 @@ class ProcessingLogObserver
 
 					$end 			= $hours*3600+$minutes*60+$seconds;
 
-					$schedule_end 	= $data->schedule_end;
+					//$schedule_end 	= $data->schedule_end;
 					list($hours, $minutes, $seconds) = explode(":", $schedule_end);
 
 					$schedule_end	= $hours*3600+$minutes*60+$seconds;
@@ -114,11 +146,14 @@ class ProcessingLogObserver
 
 					$total_active 	= $total_active - $total_sleep - $total_idle;
 
-					if(strtolower($model['attributes']['name'])=='presence')
+					if(strtolower($model['attributes']['name'])=='finger_print')
 					{
 						if($data->fp_start!='00:00:00' && $data->fp_start > $time)
 						{
 							$data->fill([
+												'schedule_start'=> gmdate('H:i:s', $schedule_start),
+												'schedule_end'	=> gmdate('H:i:s', $schedule_end),
+												'tooltip'		=> json_encode($tooltip),
 												'fp_start'		=> $time,
 												'fp_end'		=> $data->fp_start,
 												'margin_start'	=> $margin_start,
@@ -132,6 +167,9 @@ class ProcessingLogObserver
 						elseif($data->fp_start!='00:00:00' && $data->fp_start <= $time)
 						{
 							$data->fill([
+												'schedule_start'=> gmdate('H:i:s', $schedule_start),
+												'schedule_end'	=> gmdate('H:i:s', $schedule_end),
+												'tooltip'		=> json_encode($tooltip),
 												'fp_start'		=> $data->fp_start,
 												'fp_end'		=> $time,
 												'margin_start'	=> $margin_start,
@@ -145,6 +183,9 @@ class ProcessingLogObserver
 						else
 						{
 							$data->fill([
+												'schedule_start'=> gmdate('H:i:s', $schedule_start),
+												'schedule_end'	=> gmdate('H:i:s', $schedule_end),
+												'tooltip'		=> json_encode($tooltip),
 												'fp_start'		=> $time,
 												'margin_start'	=> $margin_start,
 												'margin_end'	=> $margin_end,
@@ -158,6 +199,9 @@ class ProcessingLogObserver
 					else
 					{
 						$data->fill([
+											'schedule_start'=> gmdate('H:i:s', $schedule_start),
+											'schedule_end'	=> gmdate('H:i:s', $schedule_end),
+											'tooltip'		=> json_encode($tooltip),
 											'end'			=> $time,
 											'margin_start'	=> $margin_start,
 											'margin_end'	=> $margin_end,
@@ -192,7 +236,7 @@ class ProcessingLogObserver
 
 					$start 			= $hours*3600+$minutes*60+$seconds;
 
-					$schedule_start = $data->schedule_start;
+					//$schedule_start = $data->schedule_start;
 					list($hours, $minutes, $seconds) = explode(":", $schedule_start);
 
 					$schedule_start	= $hours*3600+$minutes*60+$seconds;
@@ -205,7 +249,7 @@ class ProcessingLogObserver
 
 					$end 			= $hours*3600+$minutes*60+$seconds;
 
-					$schedule_end 	= $data->schedule_end;
+					//$schedule_end 	= $data->schedule_end;
 					list($hours, $minutes, $seconds) = explode(":", $schedule_end);
 
 					$schedule_end	= $hours*3600+$minutes*60+$seconds;
@@ -258,11 +302,14 @@ class ProcessingLogObserver
 
 					$total_active 	= $total_active - $total_sleep - $total_idle;
 
-					if(strtolower($model['attributes']['name'])=='presence')
+					if(strtolower($model['attributes']['name'])=='finger_print')
 					{
 						if($data->fp_start!='00:00:00' && $data->fp_start > $time)
 						{
 							$data->fill([
+												'schedule_start'=> gmdate('H:i:s', $schedule_start),
+												'schedule_end'	=> gmdate('H:i:s', $schedule_end),
+												'tooltip'		=> json_encode($tooltip),
 												'fp_start'		=> $time,
 												'fp_end'		=> $data->fp_start,
 												'margin_start'	=> $margin_start,
@@ -276,6 +323,9 @@ class ProcessingLogObserver
 						elseif($data->fp_start!='00:00:00' && $data->fp_start <= $time)
 						{
 							$data->fill([
+												'schedule_start'=> gmdate('H:i:s', $schedule_start),
+												'schedule_end'	=> gmdate('H:i:s', $schedule_end),												
+												'tooltip'		=> json_encode($tooltip),
 												'fp_start'		=> $data->fp_start,
 												'fp_end'		=> $time,
 												'margin_start'	=> $margin_start,
@@ -289,6 +339,9 @@ class ProcessingLogObserver
 						else
 						{
 							$data->fill([
+												'schedule_start'=> gmdate('H:i:s', $schedule_start),
+												'schedule_end'	=> gmdate('H:i:s', $schedule_end),												
+												'tooltip'		=> json_encode($tooltip),
 												'fp_start'		=> $time,
 												'margin_start'	=> $margin_start,
 												'margin_end'	=> $margin_end,
@@ -302,6 +355,9 @@ class ProcessingLogObserver
 					else
 					{
 						$data->fill([
+										'schedule_start'=> gmdate('H:i:s', $schedule_start),
+										'schedule_end'	=> gmdate('H:i:s', $schedule_end),										
+										'tooltip'		=> json_encode($tooltip),
 										'start'			=> $time,
 										'margin_start'	=> $margin_start,
 										'margin_end'	=> $margin_end,
@@ -326,11 +382,12 @@ class ProcessingLogObserver
 			{
 				$data 					= new ProcessLog;
 				$person 				= Person::find($model['attributes']['person_id']);
-				$pschedule 				= Person::ID($model['attributes']['person_id'])->schedule(['on' => $on])->withAttributes(['schedules'])->first();
-				if($pschedule)
+				$pschedulee 			= Person::ID($model['attributes']['person_id'])->maxendschedule(['on' => $on])->first();
+				$pschedules 			= Person::ID($model['attributes']['person_id'])->minstartschedule(['on' => $on])->first();
+				if($pschedulee && $pschedules)
 				{
-					$schedule_start		= $pschedule->schedules[0]->start;
-					$schedule_end		= $pschedule->schedules[0]->end;
+					$schedule_start		= $pschedules->schedules[0]->start;
+					$schedule_end		= $pschedulee->schedules[0]->end;
 				}
 				else
 				{
@@ -357,10 +414,11 @@ class ProcessingLogObserver
 					}
 				}
 
-				if(strtolower($model['attributes']['name'])=='presence')
+				if(strtolower($model['attributes']['name'])=='finger_print')
 				{
 					$data->fill([
 										'name'			=> 'Attendance',
+										'tooltip'		=> json_encode(['finger_print']),
 										'on'			=> $on,
 										'fp_start'		=> $time,
 										'schedule_start'=> date('H:i:s',strtotime($schedule_start)),
@@ -372,6 +430,7 @@ class ProcessingLogObserver
 				{
 					$data->fill([
 										'name'			=> 'Attendance',
+										'tooltip'		=> json_encode(['tracker']),
 										'on'			=> $on,
 										'start'			=> $time,
 										'schedule_start'=> date('H:i:s',strtotime($schedule_start)),

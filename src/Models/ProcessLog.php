@@ -61,6 +61,7 @@ class ProcessLog extends BaseModel {
 										'total_idle' 					,
 										'total_sleep' 					,
 										'total_active' 					,
+										'tooltip' 						,
 									];
 
 	protected 	$rules				= 	[

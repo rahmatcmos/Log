@@ -49,7 +49,7 @@ class PresenceController extends Controller {
 			$attributes['log']					= (array)$attributes['log'];
 			foreach ($attributes['log'] as $key => $value) 
 			{
-				$log['name']					= strtolower('presence');
+				$log['name']					= strtolower('finger_print');
 				$log['on']						= date("Y-m-d H:i:s", strtotime($value[1]));
 				$log['pc']						= $value[2];
 

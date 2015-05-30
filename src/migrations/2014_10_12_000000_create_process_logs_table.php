@@ -30,6 +30,7 @@ class CreateProcessLogsTable extends Migration {
 			$table->double('total_idle');
 			$table->double('total_sleep');
 			$table->double('total_active');
+			$table->text('tooltip');
 			$table->timestamps();
 			$table->softDeletes();
 			
