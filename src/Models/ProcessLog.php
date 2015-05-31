@@ -161,6 +161,10 @@ class ProcessLog extends BaseModel {
 		{
 			$notes[] = 'overtime';
 		}
+		elseif($this->margin_end <= 3600 && $this->margin_end >= 0)
+		{
+			$notes[] = 'ontime';
+		}
 
 		return $notes;
 	}
@@ -221,7 +225,9 @@ class ProcessLog extends BaseModel {
 
 	public function scopeGlobal($query, $variable)
 	{
-		return $query->select(['schedule_start', 'schedule_end'])
+		return $query->select(['person_id'])
+					->selectRaw('avg(TIME_TO_SEC(schedule_start)) as avg_schedule_start')
+					->selectRaw('avg(TIME_TO_SEC(schedule_end)) as avg_schedule_end')
 					->selectRaw('avg(margin_start) as margin_start')
 					->selectRaw('avg(margin_end) as margin_end')
 
@@ -241,9 +247,9 @@ class ProcessLog extends BaseModel {
 					->selectRaw('avg(total_sleep) as avg_sleep')
 					->selectRaw('sum(total_active) as total_active')
 					->selectRaw('avg(total_active) as avg_active')
+					->groupBy('person_id')
+		;
 
-					->selectRaw('person_id')
-					->groupBy('person_id');
 	}
 
 	public function scopeLocal($query, $variable)
