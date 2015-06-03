@@ -54,7 +54,7 @@ class Log extends BaseModel {
 											'withattributes' 			=> 'WithAttributes'
 										];
 										
-	public $sortable 				= 	['created_at'];
+	public $sortable 				= 	['created_at', 'on'];
 
 	/* ---------------------------------------------------------------------------- CONSTRUCT ----------------------------------------------------------------------------*/
 	/**
