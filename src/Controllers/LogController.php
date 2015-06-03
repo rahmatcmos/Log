@@ -22,6 +22,19 @@ class LogController extends Controller {
 	 * @return void
 	 * @author 
 	 **/
+	public function index($page = 1, $search = null, $sort = null, $per_page = 12)
+	{
+		$contents 								= $this->dispatch(new Getting(new Log, $search, $sort ,(int)$page, $per_page));
+		
+		return $contents;
+	}
+
+	/**
+	 * login form
+	 *
+	 * @return void
+	 * @author 
+	 **/
 	public function store()
 	{
 		$attributes 							= Input::only('application', 'log');

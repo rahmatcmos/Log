@@ -198,10 +198,19 @@ class ProcessingLogObserver
 					}
 					else
 					{
+						if($data->start!='00:00:00')
+						{
+							$starts 						= $data->start;
+						}
+						else
+						{
+							$starts 						= gmdate('H:i:s', $start);
+						}
 						$data->fill([
 											'schedule_start'=> gmdate('H:i:s', $schedule_start),
 											'schedule_end'	=> gmdate('H:i:s', $schedule_end),
 											'tooltip'		=> json_encode($tooltip),
+											'start'			=> $starts,
 											'end'			=> $time,
 											'margin_start'	=> $margin_start,
 											'margin_end'	=> $margin_end,

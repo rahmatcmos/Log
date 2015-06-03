@@ -50,6 +50,7 @@ class Log extends BaseModel {
 											'id' 						=> 'ID', 
 											'personid' 					=> 'PersonID', 
 											'name' 						=> 'Name', 
+											'ondate' 					=> 'OnDate', 
 											'withattributes' 			=> 'WithAttributes'
 										];
 										
